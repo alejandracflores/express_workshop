@@ -1,6 +1,10 @@
+const morgan = require('morgan');
 const express = require('express');
 const app = express();
-const {pokemon} = require('./pokedex.json');
+const pokemon = require('./routes/pokemon');
+
+//Herramienta de desarrollo que no se debe de utilizar en producción para no da rmás información de la que se debería
+app.use(morgan('dev'));
 
 // Añadir capas que procesaran las peticiones y que les harán alguna modificación o revisarán algun dato.
 app.use(express.json());
@@ -10,9 +14,7 @@ app.get("/", (req, res, next) => {
     return res.status(200).send("Bienvenido al Pokedex");
 });
 
-app.post("/pokemon", (req, res, next) => {
-    return res.status(200).send(req.body);
-})
+app.use("/pokemon", pokemon);
 
 /*
 Verbos HTTP
@@ -31,42 +33,6 @@ Entre llaves: extraer el elemento que estamos pidiendo
 
 // Regex Javascript
 
-app.get("/pokemon", (req, res, next) => {
-    return res.status(200).send(pokemon);
-})
-
-app.get('/pokemon/:id([0-9]{1,3})', (req, res, next) =>{
-    const id = req.params.id - 1;
-    // (id >= 0 && id <= 150) ? 
-    // res.status(200).send(pokemon[req.params.id - 1]) : 
-    // res.status(404).send("Pokemon no encontrado");
-    if (id >= 0 && id <= 150) {
-        return res.status(200).send(pokemon[req.params.id - 1])
-    } 
-    return res.status(404).send("Pokemon no encontrado");
-});
-
-app.get('/pokemon/:name([A-Zaz]+)', (req, res, next) => {
-    const name = req.params.name;
-    /* for(i = 0; i < pokemon.length; i++) {
-        if(pokemon[i].name.toUpperCase() == name.toUpperCase()) {
-            return res.status(200).send(pokemon[i]);
-        }
-    } */
-
-    // OPERADOR TERNARIO: condición ? valor si verdadero : valor si falso
-    // usar cuando queremos que de un if se retorne algo
-
-    // && si las dos condiciones son verdaderas, devuelve lo que le sigue como en las tablas de verdad
-
-    const pk = pokemon.filter((p) => {
-        return (p.name.toUpperCase() == name.toUpperCase()) && p;
-    });
-
-    (pk.length > 0) ? 
-    res.status(200).send(pk) : 
-    res.status(404).send("Pokemon no encontrado");
-});
 
 app.listen(process.env.PORT || 3000, () => {
     console.log("server is runing...")
