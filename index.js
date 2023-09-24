@@ -11,10 +11,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req, res, next) => {
-    return res.status(200).send("Bienvenido al Pokedex");
+    return res.status(200).json({ code: 1, message: "Bienvenido al Pokédex" });
 });
 
 app.use("/pokemon", pokemon);
+
+//Express es secuencial, si no coincide la ruta con la anterior esta se ejecutará
+app.use((req, res, next) => {
+    return res.status(404).json({ code: 404, message: "URL no encontrada" });
+});
 
 /*
 Verbos HTTP
