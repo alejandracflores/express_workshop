@@ -2,6 +2,7 @@ const morgan = require('morgan');
 const express = require('express');
 const app = express();
 const pokemon = require('./routes/pokemon');
+const user = require('./routes/user');
 
 //Herramienta de desarrollo que no se debe de utilizar en producción para no da rmás información de la que se debería
 app.use(morgan('dev'));
@@ -15,6 +16,7 @@ app.get("/", (req, res, next) => {
 });
 
 app.use("/pokemon", pokemon);
+app.use("/user", user);
 
 //Express es secuencial, si no coincide la ruta con la anterior esta se ejecutará
 app.use((req, res, next) => {
