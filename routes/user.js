@@ -7,7 +7,7 @@ user.post("/", async (req, res, next) => {
 
     if (user_name && user_mail && user_password) {
         let query = "INSERT INTO user (user_name, user_mail, user_password) ";
-        query += `VALUES ('${user_name}', '${user_mail}', '${user_password}')`;
+        query += `VALUES ('${user_name}', '${user_mail}', '${user_password}');`;
         const rows = await db.query(query);
     
         if(rows.affectedRows == 1) {
@@ -16,6 +16,12 @@ user.post("/", async (req, res, next) => {
         return res.status(500).json({code: 500, message: "Ocurrió un error"});
     }
     return res.status(500).json({code: 500, message: "Campos incompletos"});
+});
+
+user.post("/login", async (req, res, next) => {
+    const { user_mail, user_password } = req.body;
+    const query = `SELECT * FROM user WHERE user_mail = '${user_mail}' AND user_password = '${user_password};'`;
+    const rows = await db.query(query);
 });
 
 user.get("/", async (req, res, next) => {
