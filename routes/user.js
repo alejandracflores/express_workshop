@@ -2,7 +2,7 @@ const express = require('express');
 const user = express.Router();
 const db = require('../config/database');
 
-user.post("/", async (req, res, next) => {
+user.post("/singin", async (req, res, next) => {
     const { user_name, user_mail, user_password } = req.body;
 
     if (user_name && user_mail && user_password) {
