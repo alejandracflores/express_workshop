@@ -15,9 +15,9 @@ app.get("/", (req, res, next) => {
     return res.status(200).json({ code: 1, message: "Bienvenido al Pokédex" });
 });
 
-app.use("/user", user);
 
 app.use("/pokemon", pokemon);
+app.use("/user", user);
 
 //Express es secuencial, si no coincide la ruta con la anterior esta se ejecutará
 app.use((req, res, next) => {
