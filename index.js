@@ -1,28 +1,28 @@
+//Dependencies
 const morgan = require('morgan');
 const express = require('express');
 const app = express();
+//Routers
 const pokemon = require('./routes/pokemon');
 const user = require('./routes/user');
+//Middleware
+const auth = require('./middleware/auth');
+const notFound = require('./middleware/notFound');
+const index = require('./middleware/index');
 
 //Herramienta de desarrollo que no se debe de utilizar en producción para no da rmás información de la que se debería
 app.use(morgan('dev'));
-
 // Añadir capas que procesaran las peticiones y que les harán alguna modificación o revisarán algun dato.
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get("/", (req, res, next) => {
-    return res.status(200).json({ code: 1, message: "Bienvenido al Pokédex" });
-});
-
-
-app.use("/pokemon", pokemon);
+app.get("/", index);
 app.use("/user", user);
-
+//Middleware algo que se encarga de procesar una petición
+app.use(auth);
+app.use("/pokemon", pokemon);
 //Express es secuencial, si no coincide la ruta con la anterior esta se ejecutará
-app.use((req, res, next) => {
-    return res.status(404).json({ code: 404, message: "URL no encontrada" });
-});
+app.use(notFound);
 
 /*
 Verbos HTTP
