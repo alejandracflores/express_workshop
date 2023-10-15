@@ -9,9 +9,14 @@ const user = require('./routes/user');
 const auth = require('./middleware/auth');
 const notFound = require('./middleware/notFound');
 const index = require('./middleware/index');
+const cors = require('./middleware/cors')
 
 //Herramienta de desarrollo que no se debe de utilizar en producción para no da rmás información de la que se debería
 app.use(morgan('dev'));
+
+//CORS
+app.use(cors);
+
 // Añadir capas que procesaran las peticiones y que les harán alguna modificación o revisarán algun dato.
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
